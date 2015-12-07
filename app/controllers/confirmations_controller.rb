@@ -39,7 +39,7 @@ class ConfirmationsController < Milia::ConfirmationsController
       self.resource = resource_class.confirm_by_token(params[:confirmation_token])
       yield resource if block_given?
 
-      if resource_errors_empty?
+      if resource.errors.empty?
         set_flash_message(:notice, :confirmed) if is_flashing_format?
       end
       if @confirmable.skip_confirm_change_password
@@ -53,7 +53,7 @@ class ConfirmationsController < Milia::ConfirmationsController
     # else fall thru to show template which is form to set a password
     # upon SUBMIT, processing will continue from update
   end
-  
+
   def after_confirmation_path_for(resource_name, resource)
     if user_signed_in?
       root_path
