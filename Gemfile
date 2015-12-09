@@ -7,6 +7,8 @@ gem 'rails', '4.2.3'
 gem 'devise'
 # Multi-tenancy
 gem 'milia'
+# AWS
+gem 'aws-sdk'
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use SCSS for stylesheets
