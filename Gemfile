@@ -9,6 +9,8 @@ gem 'devise'
 gem 'milia'
 # AWS
 gem 'aws-sdk'
+# Stripe
+gem 'stripe'
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use SCSS for stylesheets
