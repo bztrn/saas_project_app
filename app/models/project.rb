@@ -1,8 +1,10 @@
 class Project < ActiveRecord::Base
   belongs_to :tenant
-  
+
   has_many :artifacts, dependent: :destroy
-  
+  has_many :user_projects
+  has_many :users, through: :user_projects
+
   validates_uniqueness_of :title
   validate :free_plan_can_only_have_one_project
 
@@ -11,13 +13,22 @@ class Project < ActiveRecord::Base
       errors.add(:base, "Free Plans can only have one project - update to Premium for unlimited projects")
     end
   end
-  
-  def self.by_plan_and_tenant(tenant_id)
+
+  def self.by_user_plan_and_tenant(tenant_id, user)
     tenant = Tenant.find(tenant_id)
+    
     if tenant.plan == 'premium'
-      tenant.projects
+      if user.is_admin?
+        tenant.projects
+      else
+        user.projects.where(tenant_id: tenant.id)
+      end
     else
-      tenant.projects.order(:id).limit(1)
+      if user.is_admin?
+        tenant.projects.order(:id).limit(1)
+      else
+        user.projects.where(tenant_id: tenant.id).order(:id).limit(1)
+      end
     end
   end
 end
